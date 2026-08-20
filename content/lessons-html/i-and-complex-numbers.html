@@ -1,0 +1,101 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>把 $i$ 從「一個符號」變成「一個動作」</h2>
+  <p>論文裡每個量子態都寫成 $\alpha|0\rangle + \beta|1\rangle$，其中 $\alpha,\beta$ 是複數。
+  如果你只把 $i$ 記成「$\sqrt{-1}$」這個代數技巧，之後看到<b>相位 (phase)</b>、<b>干涉 (interference)</b>
+  這些字眼時會完全建立不起直覺。</p>
+  <p>這一課只做一件事：讓你看見 <b>$i$ 其實是一個旋轉 90 度的動作</b>。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>複數 = 平面上的箭頭 = 旋轉</h2>
+
+  <p>一個複數 $z = a + bi$ 可以畫成平面上的點 $(a,b)$。但更有用的看法是<b>極座標形式</b>：</p>
+
+  <div class="formula-box">
+    $$z = re^{i\theta} = r(\cos\theta + i\sin\theta)$$
+  </div>
+
+  <p>$r$ 是長度（模），$\theta$ 是角度（<b>相位</b>）。乘上 $e^{i\theta}$ 這個動作，
+  幾何上就是「把箭頭轉 $\theta$ 角度，長度不變」。</p>
+
+  <div class="widget" data-widget="complex-plane" data-title="複數平面：拖曳看 $re^{i\theta}$"></div>
+
+  <details class="deriv" open>
+    <summary>📐 推導：為什麼「乘 $i$」剛好是轉 90 度？</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">Step 1 · 從尤拉公式出發</span>
+        $$e^{i\theta} = \cos\theta + i\sin\theta$$
+        這是整個複數幾何的樞紐，把「指數」和「三角函數」接在一起。
+      </div>
+      <div class="step"><span class="tag">Step 2 · 代入 $\theta = \pi/2$</span>
+        $$e^{i\pi/2} = \cos\frac{\pi}{2} + i\sin\frac{\pi}{2} = 0 + i\cdot 1 = i$$
+        所以 <b>$i = e^{i\pi/2}$</b>——「乘上 $i$」就是「乘上 $e^{i\pi/2}$」，也就是逆時針轉 90 度。
+      </div>
+      <div class="step"><span class="tag">Step 3 · 解釋 $i^2 = -1$</span>
+        $$i^2 = e^{i\pi/2}\cdot e^{i\pi/2} = e^{i\pi} = \cos\pi + i\sin\pi = -1$$
+        轉兩次 90 度 = 轉 180 度 = 方向完全反過來。
+        <b>「$i^2=-1$」不再是一條要背的規則，而是一個幾何事實。</b>
+        上面的互動元件按四次「× i」就會轉回原點，因為 $i^4 = e^{2\pi i} = 1$。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">連結到量子力學</div>
+  <h2>相位差 → 干涉 → 量子演算法的動力來源</h2>
+
+  <p>量子態的係數（<b>機率幅</b>）是複數，其中的角度部分稱為<b>相位</b>。
+  兩個量子態相加時，相位決定它們是互相<b>加強</b>還是互相<b>抵消</b>——這就是量子干涉。</p>
+
+  <div class="example-box">
+    <span class="ex-tag">手算範例 · 相位如何決定加強或抵消</span>
+    <p>考慮兩個機率幅相加，看相位差如何徹底改變結果：</p>
+    <div class="formula-box small">
+      $$\frac{1}{\sqrt2}\left(1\right) + \frac{1}{\sqrt2}\left(e^{i\cdot 0}\right)
+        = \frac{2}{\sqrt2} = \sqrt2 \quad\text{（同相位 → 加強）}$$
+    </div>
+    <div class="formula-box small">
+      $$\frac{1}{\sqrt2}\left(1\right) + \frac{1}{\sqrt2}\left(e^{i\pi}\right)
+        = \frac{1}{\sqrt2}(1 - 1) = 0 \quad\text{（相位差 }\pi\text{ → 完全抵消）}$$
+    </div>
+    <p>兩個式子的「大小」完全一樣（都是 $1/\sqrt2$），只有<b>相位</b>不同，
+    結果卻從「$\sqrt2$」變成「$0$」。<b>量子演算法的設計精髓，就是安排相位，
+    讓錯誤答案互相抵消、正確答案互相加強。</b></p>
+  </div>
+
+  <p>如果係數只能是實數，就沒辦法描述這種依角度而定的加強／抵消行為——
+  這正是量子計算比古典計算「多出來」的自由度。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>複數 $z = re^{i\theta}$ 可以理解成「長度 $r$、角度 $\theta$ 的箭頭」</li>
+    <li>乘上 $i$ = 逆時針轉 90 度，這解釋了 $i^2 = -1$、$i^4 = 1$</li>
+    <li>量子態的複數係數帶有<b>相位</b>，相位差決定了干涉是加強還是抵消</li>
+    <li>後面每一課的「相位」討論，源頭都在這裡</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "若 $z = e^{i\\pi/4}$，連續乘上 $z$ 兩次，總共轉了幾度？",
+    "options": ["45 度", "90 度", "180 度", "360 度"],
+    "answer": 1,
+    "explain": "$\\pi/4$ 弧度 = 45 度。乘兩次等於轉 $2\\times45 = 90$ 度，效果等同於乘一次 $i$。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i>,
+      Cambridge University Press — 第 1–2 章，量子位元的複數係數表示與相位的物理意義。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Representing Qubit States" 與 "Single Qubit Gates"
+      章節，說明相位在量子閘操作中的角色。</li>
+    <li>3Blue1Brown, <i>"Imaginary numbers are real"</i> 影片系列 —
+      複數作為旋轉的幾何直覺，適合作為視覺化補充。</li>
+  </ol>
+</section>

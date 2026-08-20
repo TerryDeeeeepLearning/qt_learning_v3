@@ -1,0 +1,142 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>「可觀測量」背後一定是一個 Hermitian 矩陣</h2>
+  <p>論文裡講「observable（可觀測量）」時，背後一定對應一個 Hermitian 矩陣；
+  講「這個算子的特徵值就是可能的測量結果」時，用的就是這一課的工具。
+  <b>這是連接「數學算子」與「物理量測」的橋樑。</b></p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">先備知識</div>
+  <details class="deriv prereq">
+    <summary>🔁 快速複習：共軛轉置怎麼算</summary>
+    <div class="deriv-body">
+      <div class="step">
+        矩陣 $A$ 的共軛轉置 $A^\dagger$：<b>先轉置，再對每個元素取共軛</b>。
+        $$(A^\dagger)_{ij} = \overline{A_{ji}}$$
+      </div>
+      <div class="step">
+        例子：$A = \begin{pmatrix} 1 & 2i \\ 0 & 3\end{pmatrix}$
+        $\Rightarrow$ 轉置得 $\begin{pmatrix} 1 & 0 \\ 2i & 3\end{pmatrix}$
+        $\Rightarrow$ 取共軛得 $A^\dagger = \begin{pmatrix} 1 & 0 \\ -2i & 3\end{pmatrix}$。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>Hermitian 算子的兩個關鍵性質</h2>
+
+  <div class="formula-box">
+    $$A^\dagger = A \quad\Longrightarrow\quad A \text{ 是 Hermitian（厄米）算子}$$
+  </div>
+
+  <p>這類算子有兩個對物理極為關鍵的性質：</p>
+  <ul>
+    <li><b>特徵值一定是實數</b>——測量結果是我們讀得出來的實際數字（能量、自旋方向），不能是複數</li>
+    <li><b>不同特徵值的特徵向量互相正交</b>——特徵向量可以直接當作一組基底</li>
+  </ul>
+
+  <details class="deriv" open>
+    <summary>📐 推導：為什麼 Hermitian 算子的特徵值必為實數？</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">設定</span>
+        設 $A|v\rangle = \lambda|v\rangle$，且 $|v\rangle$ 已歸一化（$\langle v|v\rangle = 1$）。
+        目標：證明 $\lambda$ 是實數，也就是 $\lambda = \bar\lambda$。
+      </div>
+      <div class="step"><span class="tag">Step 1 · 從左邊夾 $\langle v|$</span>
+        $$\langle v|A|v\rangle = \langle v|\lambda|v\rangle = \lambda\langle v|v\rangle = \lambda$$
+      </div>
+      <div class="step"><span class="tag">Step 2 · 對同一個量取共軛</span>
+        利用內積的規則 $\overline{\langle\phi|\psi\rangle} = \langle\psi|\phi\rangle$：
+        $$\bar\lambda = \overline{\langle v|A|v\rangle} = \langle v|A^\dagger|v\rangle$$
+      </div>
+      <div class="step"><span class="tag">Step 3 · 套用 Hermitian 條件</span>
+        因為 $A^\dagger = A$，上式立刻變成：
+        $$\bar\lambda = \langle v|A|v\rangle = \lambda$$
+      </div>
+      <div class="step"><span class="tag">結論</span>
+        $\lambda = \bar\lambda$ $\Rightarrow$ <b>$\lambda$ 必為實數</b>。$\blacksquare$
+        <br>整個證明只用到「$A^\dagger=A$」和「內積取共軛會交換順序」這兩件事，
+        但推出的結論卻是物理上不可或缺的。
+      </div>
+    </div>
+  </details>
+
+  <h3>特徵分解（Spectral Decomposition）</h3>
+  <div class="formula-box">
+    $$A = \sum_i \lambda_i |i\rangle\langle i|$$
+    <div class="eq-note">先把輸入態投影到 $|i\rangle$ 方向，乘上權重 $\lambda_i$，最後全部加起來</div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動探索</div>
+  <h2>自己檢查：哪些矩陣是 Hermitian？特徵值是什麼？</h2>
+
+  <p>下面的檢查器會<b>實際計算</b>（不是查表）：驗證 $A^\dagger = A$、驗證 $U^\dagger U = I$、
+  並用解析公式解出特徵值與特徵向量。</p>
+
+  <div class="widget" data-widget="matrix-inspector" data-title="矩陣性質檢查器"></div>
+
+  <p>切換不同矩陣時，注意一件事：<b>Pauli 矩陣（X、Y、Z）同時是 Hermitian 又是酉算子</b>，
+  這是它們的特殊性質，不是通例。S 閘就只是酉算子，不是 Hermitian——
+  它可以當量子閘，但不能當可觀測量。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">實際應用</div>
+  <h2>Pauli-Z 與「在計算基底上測量」</h2>
+
+  <div class="example-box">
+    <span class="ex-tag">手算範例 · 為什麼「測 Z」等於「測 0 或 1」</span>
+    <div class="formula-box small">
+      $$Z = \begin{pmatrix} 1 & 0 \\ 0 & -1\end{pmatrix}$$
+    </div>
+    <p>直接求特徵值：因為 $Z$ 是對角矩陣，對角線元素就是特徵值，即 $\lambda = +1, -1$。
+    對應的特徵向量：</p>
+    <div class="formula-box small">
+      $$Z|0\rangle = \begin{pmatrix}1&0\\0&-1\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}
+        = \begin{pmatrix}1\\0\end{pmatrix} = +1\cdot|0\rangle$$
+      $$Z|1\rangle = \begin{pmatrix}1&0\\0&-1\end{pmatrix}\begin{pmatrix}0\\1\end{pmatrix}
+        = \begin{pmatrix}0\\-1\end{pmatrix} = -1\cdot|1\rangle$$
+    </div>
+    <p>寫成特徵分解形式：</p>
+    <div class="formula-box small">
+      $$Z = (+1)|0\rangle\langle 0| + (-1)|1\rangle\langle 1|$$
+    </div>
+    <p><b>這就是為什麼文獻裡「測量 $Z$」跟「在計算基底上測量」是同一件事</b>——
+    $Z$ 的特徵分解直接告訴你：測量的基底是 $\{|0\rangle,|1\rangle\}$，
+    可能的讀數是 $\pm 1$。算子和測量方式，在數學上是同一個東西的兩種說法。</p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>$A^\dagger = A$ 的算子稱為 Hermitian，<b>特徵值必為實數</b>（已完整推導）</li>
+    <li>Hermitian 算子的特徵向量構成一組正交基底</li>
+    <li>特徵分解 $A=\sum_i\lambda_i|i\rangle\langle i|$ 把「算子」與「基底＋可能讀數」連在一起</li>
+    <li>Pauli-$Z$ 的特徵分解，就是「在計算基底上測量」的數學形式</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "Pauli-$X = \\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ 的特徵值是什麼？",
+    "options": ["$0$ 和 $1$", "$+1$ 和 $-1$", "$+i$ 和 $-i$", "都是 $0$"],
+    "answer": 1,
+    "explain": "$X$ 是 Hermitian（實對稱矩陣），特徵值為 $+1$ 和 $-1$，對應特徵向量是 $|+\\rangle=\\frac{1}{\\sqrt2}(|0\\rangle+|1\\rangle)$ 與 $|-\\rangle=\\frac{1}{\\sqrt2}(|0\\rangle-|1\\rangle)$。你可以在上面的檢查器裡切到 X 驗證這個結果。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 2 章，Hermitian 算子與譜定理（spectral theorem）的完整推導。</li>
+    <li>Preskill, J., <i>Lecture Notes for Physics 219: Quantum Computation</i>, Caltech（公開講義）—
+      可觀測量與特徵分解的物理詮釋。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Linear Algebra" 章節中的 Pauli 算子介紹。</li>
+  </ol>
+</section>

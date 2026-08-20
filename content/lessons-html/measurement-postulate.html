@@ -1,0 +1,122 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>每個電路圖最後那個測量符號，到底做了什麼</h2>
+  <p>這一課講清楚三件事：測量在數學上是什麼、機率從哪裡來、
+  以及為什麼測量之後量子態會「不可逆地改變」。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>Born 規則</h2>
+
+  <div class="formula-box">
+    $$P(i) = |\langle i|\psi\rangle|^2$$
+    <div class="eq-note">測量得到結果 $i$ 的機率</div>
+  </div>
+
+  <details class="deriv" open>
+    <summary>📐 推導：Born 規則與歸一化條件是同一件事的兩面</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">Step 1 · 用第 2 課的投影取係數</span>
+        設 $|\psi\rangle = \alpha|0\rangle+\beta|1\rangle$。由第 2 課：
+        $$\langle 0|\psi\rangle = \alpha,\qquad \langle 1|\psi\rangle = \beta$$
+      </div>
+      <div class="step"><span class="tag">Step 2 · 代入 Born 規則</span>
+        $$P(0) = |\alpha|^2,\qquad P(1) = |\beta|^2$$
+      </div>
+      <div class="step"><span class="tag">Step 3 · 檢查機率的基本要求</span>
+        機率必須非負：$|\alpha|^2 \geq 0$ ✓（第 2 課證過，模長平方必為非負實數）。<br>
+        機率總和必須為 1：
+        $$P(0)+P(1) = |\alpha|^2+|\beta|^2 = \langle\psi|\psi\rangle = 1$$
+      </div>
+      <div class="step"><span class="tag">結論</span>
+        <b>「量子態必須歸一化」這條看似人為的規定，其實就是「機率總和為 1」。</b>
+        前面幾課一直出現的 $\langle\psi|\psi\rangle=1$，
+        到這裡終於顯示出它的物理意義。$\blacksquare$
+      </div>
+    </div>
+  </details>
+
+  <h3>測量會讓狀態塌縮</h3>
+  <div class="formula-box small">
+    $$|\psi\rangle \xrightarrow{\ \text{測到 } i\ } |i\rangle$$
+  </div>
+  <p>測量之後，狀態會立刻變成 $|i\rangle$ 本身，之前的疊加資訊<b>永久消失</b>。
+  這叫<b>投影測量</b>。這解釋了一個實作細節：量子電路裡測量通常放在最後，
+  因為測量之後疊加沒了，再做酉演化也無法回復。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動實驗</div>
+  <h2>實際跑 shots：看統計如何逼近理論值</h2>
+
+  <p>下面的模擬器<b>每一次測量都是真的依 Born 規則抽樣</b>，不是預錄動畫。
+  先按「測 1 次」感受單次測量的隨機性，再按「測 1000 次」看統計收斂：</p>
+
+  <div class="widget" data-widget="measurement-sim" data-title="測量模擬器：理論 vs 實測"></div>
+
+  <div class="example-box">
+    <span class="ex-tag">為什麼真實硬體要跑上千個 shots</span>
+    <p>單次測量只能得到一個 0 或 1——你<b>無法從一次測量看出機率</b>。
+    要驗證理論預測的機率分布，必須重複執行同一個電路上千次（稱為 shots），
+    再從統計分布反推機率。</p>
+    <p>統計誤差大致以 $1/\sqrt{N}$ 的速度縮小（$N$ 是 shots 數）：
+    要把誤差減半，shots 數要變成 4 倍。這是量子演算法實作上一個很實際的成本考量——
+    <b>後面第 13 課的 Shor 演算法，以及量子機器學習裡的 VQE/QAOA，
+    都受這個統計取樣成本限制。</b></p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">關鍵洞察</div>
+  <h2>為什麼相位在測量時「看不見」</h2>
+
+  <p>Born 規則只看 $|\langle i|\psi\rangle|^2$——只看<b>大小</b>，不看相位角度。
+  這解釋了第 1、5 課提過的「全域相位不影響測量」。</p>
+
+  <div class="formula-box small">
+    $$\big|e^{i\varphi}\alpha\big|^2 = |e^{i\varphi}|^2\,|\alpha|^2 = 1\cdot|\alpha|^2 = |\alpha|^2$$
+  </div>
+
+  <p>但這也帶來一個<b>設計上的根本約束</b>：</p>
+
+  <div class="key-insight">
+    <span class="ki-mark">◆</span>
+    <div>
+      <b>量子演算法必須設計成：讓相位先透過干涉「轉換成大小的差異」，才能在最後被測量讀出來。</b>
+      <br><br>
+      這句話是理解 QFT（第 12 課）、Grover、以及所有量子演算法設計邏輯的<b>共同前提</b>。
+      演算法不是「把答案算出來然後讀出」，而是「安排干涉，讓正確答案的機率幅變大」。
+    </div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>Born 規則：$P(i) = |\langle i|\psi\rangle|^2$</li>
+    <li><b>「歸一化條件」與「機率總和為 1」是同一件事</b>（已完整推導）</li>
+    <li>測量讓態塌縮到基底向量，疊加資訊不可逆地消失</li>
+    <li>測量只讀出大小，相位必須靠干涉先轉換成大小差異才讀得到</li>
+    <li>統計誤差以 $1/\sqrt{N}$ 縮小，這是真實實驗要跑上千 shots 的原因</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "若 $|\\psi\\rangle = \\frac{\\sqrt3}{2}|0\\rangle + \\frac{1}{2}|1\\rangle$，測到 0 的機率是多少？",
+    "options": ["$\\frac{\\sqrt3}{2} \\approx 86.6\\%$", "$75\\%$", "$50\\%$", "$25\\%$"],
+    "answer": 1,
+    "explain": "Born 規則要取<b>模長平方</b>，不是直接看係數：$P(0)=\\left(\\frac{\\sqrt3}{2}\\right)^2=\\frac{3}{4}=75\\%$。對應地 $P(1)=\\left(\\frac12\\right)^2=25\\%$，兩者相加為 1 ✓。選 86.6% 是最常見的錯誤——忘了平方。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 2 章，測量公設（Born rule）的完整推導。</li>
+    <li>Born, M., <i>"Zur Quantenmechanik der Stoßvorgänge"</i>, Zeitschrift für Physik (1926) —
+      機率詮釋的原始論文，Born 因此獲得 1954 年諾貝爾物理獎。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Measurement" 章節，含 shots 與統計估計的實作說明。</li>
+  </ol>
+</section>

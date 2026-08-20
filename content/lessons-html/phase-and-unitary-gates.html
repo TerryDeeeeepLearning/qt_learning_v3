@@ -1,0 +1,144 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>QFT 電路的主角，是受控相位閘</h2>
+  <p>下一課要推導的 QFT 電路，除了 $H$ 之外，全部都是<b>受控相位閘</b>。
+  這一課先把「相位閘」和「相位反衝」搞清楚，下一課才不會卡住。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>相位閘：加了東西，但測不出來</h2>
+
+  <div class="formula-box">
+    $$P(\theta) = \begin{pmatrix} 1 & 0 \\ 0 & e^{i\theta} \end{pmatrix}$$
+    <div class="eq-note">只改變 $|1\rangle$ 分量的相位，不動 $|0\rangle$</div>
+  </div>
+
+  <p>作用在疊加態上：</p>
+  <div class="formula-box small">
+    $$P(\theta)\big(\alpha|0\rangle+\beta|1\rangle\big) = \alpha|0\rangle + \beta e^{i\theta}|1\rangle$$
+  </div>
+
+  <p>測量機率完全沒變：$|\beta e^{i\theta}|^2 = |\beta|^2$。
+  <b>相位確實被加進去了，但單獨測量看不出來。</b></p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動實驗</div>
+  <h2>親眼看相位如何從「隱形」變成「可測量」</h2>
+
+  <p>這個實驗是整個量子演算法設計的縮影。先選「只加相位閘」，拖動 θ——
+  機率完全不動。然後切到「相位閘後再做 H」，再拖一次：</p>
+
+  <div class="widget" data-widget="phase-explorer" data-title="相位干涉實驗"></div>
+
+  <details class="deriv" open>
+    <summary>📐 推導：為什麼加了 H 之後，相位就「現形」了？</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">起點</span>
+        從 $|+\rangle = \frac{1}{\sqrt2}(|0\rangle+|1\rangle)$ 出發。
+      </div>
+      <div class="step"><span class="tag">Step 1 · 施加相位閘</span>
+        $$P(\theta)|+\rangle = \tfrac{1}{\sqrt2}\big(|0\rangle + e^{i\theta}|1\rangle\big)$$
+        測量機率：$P(0)=P(1)=\frac12$，<b>與 $\theta$ 無關</b>。
+      </div>
+      <div class="step"><span class="tag">Step 2 · 再施加 H</span>
+        利用 $H|0\rangle = \frac{1}{\sqrt2}(|0\rangle+|1\rangle)$、
+        $H|1\rangle = \frac{1}{\sqrt2}(|0\rangle-|1\rangle)$：
+        $$H\cdot\tfrac{1}{\sqrt2}\big(|0\rangle + e^{i\theta}|1\rangle\big)
+        = \tfrac12\Big[(|0\rangle+|1\rangle) + e^{i\theta}(|0\rangle-|1\rangle)\Big]$$
+      </div>
+      <div class="step"><span class="tag">Step 3 · 收集同類項</span>
+        $$= \tfrac12\Big[(1+e^{i\theta})|0\rangle + (1-e^{i\theta})|1\rangle\Big]$$
+        <b>看到關鍵了嗎？</b>$\theta$ 從「$|1\rangle$ 的相位」跑到了「$|0\rangle$ 和 $|1\rangle$ 的<b>係數大小</b>」裡。
+      </div>
+      <div class="step"><span class="tag">Step 4 · 算出機率</span>
+        $$P(0) = \tfrac14\big|1+e^{i\theta}\big|^2
+        = \tfrac14\big(2 + 2\cos\theta\big) = \cos^2\frac{\theta}{2}$$
+        （用了 $|1+e^{i\theta}|^2 = (1+\cos\theta)^2+\sin^2\theta = 2+2\cos\theta$）
+        $$P(1) = \sin^2\frac{\theta}{2}$$
+      </div>
+      <div class="step"><span class="tag">結論</span>
+        機率現在<b>明確依賴 $\theta$</b>。$\theta=0$ 時 $P(0)=1$，$\theta=\pi$ 時 $P(0)=0$。
+        <br><br>
+        <b>H 閘讓 $|0\rangle$ 和 $|1\rangle$ 的分量互相干涉，把隱形的相位差
+        轉換成了可測量的機率差異。</b>
+        這就是第 6 課那句「必須讓相位先轉換成大小差異」的具體操作方式。$\blacksquare$
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">往上一層</div>
+  <h2>受控相位閘</h2>
+
+  <div class="formula-box">
+    $$\text{CP}(\theta):\quad |11\rangle \mapsto e^{i\theta}|11\rangle,
+      \quad\text{其餘基底態不變}$$
+  </div>
+
+  <p>只有當<b>兩個量子位元都是 $|1\rangle$</b> 時，才乘上 $e^{i\theta}$。
+  在文獻裡也常寫成 $\text{CPHASE}(\theta)$ 或 $CR_k$（$\theta = 2\pi/2^k$）。</p>
+
+  <p><b>這就是下一課 QFT 電路的主要零件。</b>QFT 電路的結構是：
+  對每個位元做一次 $H$，然後用一連串受控相位閘，
+  把其他位元的資訊「以遞減的角度」寫進這個位元的相位裡。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">進階概念</div>
+  <h2>相位反衝（Phase Kickback）</h2>
+
+  <p>如果目標位元本身處於某個算子的<b>特徵態</b>，受控操作會把「應該加在目標上」的相位，
+  反過來「踢」到<b>控制位元</b>上。</p>
+
+  <div class="example-box">
+    <span class="ex-tag">推導 · 相位怎麼「踢」回去</span>
+    <p>設 $U|u\rangle = e^{i\varphi}|u\rangle$（$|u\rangle$ 是 $U$ 的特徵態）。
+    控制位元處於疊加態 $\frac{1}{\sqrt2}(|0\rangle+|1\rangle)$：</p>
+    <div class="formula-box small">
+      $$\text{C-}U\ \tfrac{1}{\sqrt2}(|0\rangle+|1\rangle)|u\rangle
+      = \tfrac{1}{\sqrt2}\big(|0\rangle|u\rangle + |1\rangle\,U|u\rangle\big)$$
+    </div>
+    <div class="formula-box small">
+      $$= \tfrac{1}{\sqrt2}\big(|0\rangle|u\rangle + e^{i\varphi}|1\rangle|u\rangle\big)
+      = \underbrace{\tfrac{1}{\sqrt2}\big(|0\rangle + e^{i\varphi}|1\rangle\big)}_{\text{相位跑到控制位元上了}}\otimes|u\rangle$$
+    </div>
+    <p><b>目標位元完全沒變</b>（還是 $|u\rangle$），但控制位元卻獲得了相位 $\varphi$。
+    再對控制位元做 $H$（就是上面推導的操作），就能把 $\varphi$ 讀出來。</p>
+    <p><b>這正是量子相位估計（Quantum Phase Estimation）演算法的核心機制，
+    而 Shor 演算法本質上就是一次相位估計。</b></p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>相位閘 $P(\theta)$ 只改變 $|1\rangle$ 的相位，單獨測量看不出差異</li>
+    <li><b>$P(\theta)$ 後接 $H$，機率變成 $\cos^2(\theta/2)$</b>——相位現形（已完整推導）</li>
+    <li>特殊角度：$P(\pi)=Z$、$P(\pi/2)=S$、$P(\pi/4)=T$</li>
+    <li>受控相位閘 CP$(\theta)$ 是 QFT 電路的主要零件</li>
+    <li>相位反衝讓相位資訊轉移到控制位元，是相位估計與 Shor 演算法的核心</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "相位閘 $P(\\pi)$ 其實等於哪一個你已經學過的閘？",
+    "options": ["Hadamard 閘 $H$", "Pauli-$X$", "Pauli-$Z$", "單位矩陣 $I$"],
+    "answer": 2,
+    "explain": "$P(\\pi) = \\begin{pmatrix}1&0\\\\0&e^{i\\pi}\\end{pmatrix} = \\begin{pmatrix}1&0\\\\0&-1\\end{pmatrix} = Z$。因為 $e^{i\\pi} = -1$（第 1 課：轉 180 度就是反向）。可以在上面的互動元件把 θ 拖到 π 附近驗證。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 4 章相位閘定義、第 5 章量子相位估計中的相位反衝機制。</li>
+    <li>Kitaev, A. Y., <i>"Quantum measurements and the Abelian Stabilizer Problem"</i>,
+      arXiv:quant-ph/9511026 (1995) — 量子相位估計演算法的奠基性論文。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Phase Kickback" 與
+      "Quantum Phase Estimation" 章節。</li>
+  </ol>
+</section>

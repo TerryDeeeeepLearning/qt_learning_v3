@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>量子軌跡 · Quantum Trace</title>
+<meta name="description" content="每天一個知識點，把量子計算連成一條電路">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0A0E1A">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="量子軌跡">
+
+<!-- KaTeX 本地打包：離線可用，不依賴 CDN -->
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<!-- 網頁字型為選配增強；載入失敗時會退回系統字型（iOS 上是 PingFang TC） -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">◈</span>
+      <span class="brand-name">量子軌跡</span>
+    </div>
+    <div class="streak" id="streak-pill">
+      <span class="streak-dot" aria-hidden="true">●</span>
+      <span id="streak-count">0</span>&nbsp;天
+    </div>
+  </header>
+
+  <main id="view-home">
+
+    <section class="today-card">
+      <p class="eyebrow">今日知識點</p>
+      <h1 id="today-title">載入中…</h1>
+      <p class="today-hook" id="today-hook"></p>
+      <div class="today-meta" id="today-meta"></div>
+      <button class="btn-primary" id="today-start-btn">開始</button>
+    </section>
+
+    <section class="tree-section">
+      <div class="tree-head">
+        <h2>知識電路</h2>
+        <p class="tree-sub">基礎到 QFT · <span id="progress-fraction">0/13</span></p>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="rail" id="rail"></div>
+    </section>
+
+    <footer class="home-foot">
+      每一課的公式都附推導、每個知識點都標註來源。<br>
+      進度儲存在這台裝置上。
+    </footer>
+
+  </main>
+
+  <main id="view-lesson" class="hidden">
+    <button class="btn-back" id="back-btn">← 知識電路</button>
+    <p class="eyebrow" id="lesson-track-label"></p>
+    <h1 id="lesson-title"></h1>
+    <div id="lesson-body" class="lesson-body"></div>
+    <button class="btn-primary btn-complete" id="complete-btn">標記完成 ✓</button>
+    <div class="next-hint" id="next-hint"></div>
+  </main>
+
+</div>
+
+<script src="vendor/katex/katex.min.js"></script>
+<script src="vendor/katex/auto-render.min.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>

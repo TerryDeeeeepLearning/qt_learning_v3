@@ -1,0 +1,129 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>「量子閘」在數學上就是一個酉算子</h2>
+  <p>論文裡看到 $U$、$R_z(\theta)$ 這些符號時，背後的規則其實跟第 1 課的
+  「乘 $i$ = 轉 90 度」是同一件事，只是從<b>單一複數</b>升級成<b>整個態向量</b>的旋轉。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>酉算子：保持長度不變的變換</h2>
+
+  <div class="formula-box">
+    $$U^\dagger U = U U^\dagger = I$$
+    <div class="eq-note">酉（unitary）算子的定義</div>
+  </div>
+
+  <details class="deriv" open>
+    <summary>📐 推導：從 $U^\dagger U = I$ 直接推出「機率守恆」</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">目標</span>
+        證明酉算子作用後，量子態的歸一化條件 $\langle\psi|\psi\rangle=1$ 依然成立。
+        這是量子力學的硬性要求：機率總和永遠是 1。
+      </div>
+      <div class="step"><span class="tag">Step 1 · 寫出作用後的內積</span>
+        設作用後的態是 $|\psi'\rangle = U|\psi\rangle$，則對應的 bra 是
+        $\langle\psi'| = \langle\psi|U^\dagger$（取共軛轉置時，$U$ 變成 $U^\dagger$ 並跑到另一邊）。
+        $$\langle\psi'|\psi'\rangle = \langle\psi|U^\dagger U|\psi\rangle$$
+      </div>
+      <div class="step"><span class="tag">Step 2 · 代入酉條件</span>
+        因為 $U^\dagger U = I$：
+        $$\langle\psi|U^\dagger U|\psi\rangle = \langle\psi|I|\psi\rangle = \langle\psi|\psi\rangle$$
+      </div>
+      <div class="step"><span class="tag">結論</span>
+        $$\langle\psi'|\psi'\rangle = \langle\psi|\psi\rangle = 1$$
+        <b>作用前後長度完全相同。</b>這解釋了一件很根本的事：
+        量子力學不是「規定」演化必須是酉的，而是「要求機率守恆」自動導致了演化必須是酉的。$\blacksquare$
+      </div>
+      <div class="step"><span class="tag">延伸</span>
+        同樣的推導對任意兩個態都成立：$\langle U\phi|U\psi\rangle = \langle\phi|\psi\rangle$。
+        <b>酉算子不只保持長度，也保持夾角</b>——所以說它是「旋轉」。
+      </div>
+    </div>
+  </details>
+
+  <h3>為什麼說酉算子是「旋轉」</h3>
+  <p>在實數空間裡，保持長度不變的線性變換就是旋轉（或鏡射）。
+  酉算子是這個概念在複數空間的推廣。回想第 1 課：$U = e^{i\theta}$ 當成 $1\times1$ 的酉「矩陣」，
+  正好滿足 $U^\dagger U = e^{-i\theta}e^{i\theta} = 1$——<b>單一複數的酉算子，就是純旋轉</b>。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動探索</div>
+  <h2>親眼驗證：不管怎麼轉，長度都不變</h2>
+
+  <p>下面的元件會實際套用旋轉閘到一個量子態上，並計算作用前後的 $\langle\psi|\psi\rangle$。
+  拖動角度，看那個數字有沒有動過：</p>
+
+  <div class="widget" data-widget="unitary-action" data-title="酉算子作用與長度守恆"></div>
+
+  <div class="formula-box small">
+    $$R_z(\theta) = \begin{pmatrix} e^{-i\theta/2} & 0 \\ 0 & e^{i\theta/2}\end{pmatrix},\qquad
+      R_y(\theta) = \begin{pmatrix} \cos\frac\theta2 & -\sin\frac\theta2 \\
+                                     \sin\frac\theta2 & \cos\frac\theta2\end{pmatrix}$$
+  </div>
+
+  <p>$R_z(\theta)$ 這個名字直接告訴你它在做什麼：<b>繞著 Bloch 球的 $z$ 軸轉 $\theta$ 角</b>
+  （Bloch 球是下一課的主題）。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">實際應用</div>
+  <h2>驗證 Pauli-X 是酉算子</h2>
+
+  <div class="example-box">
+    <span class="ex-tag">手算範例 · 兩步驗證</span>
+    <div class="formula-box small">
+      $$X = \begin{pmatrix}0&1\\1&0\end{pmatrix}$$
+    </div>
+    <p><b>Step 1</b>：求 $X^\dagger$。$X$ 是實數矩陣，取共軛不變；又是對稱矩陣，轉置也不變。
+    所以 $X^\dagger = X$。</p>
+    <p><b>Step 2</b>：計算 $X^\dagger X = X\cdot X$：</p>
+    <div class="formula-box small">
+      $$X^2 = \begin{pmatrix}0&1\\1&0\end{pmatrix}\begin{pmatrix}0&1\\1&0\end{pmatrix}
+        = \begin{pmatrix}0\cdot0+1\cdot1 & 0\cdot1+1\cdot0\\
+                          1\cdot0+0\cdot1 & 1\cdot1+0\cdot0\end{pmatrix}
+        = \begin{pmatrix}1&0\\0&1\end{pmatrix} = I$$
+    </div>
+    <p>✓ $X^\dagger X = I$，確認 $X$ 是酉算子。</p>
+    <p><b>物理意義</b>：$X^2 = I$ 代表「翻轉兩次等於沒翻轉」——這跟古典 NOT 閘的性質完全一致，
+    也是為什麼 $X$ 被稱為量子版的 NOT 閘。</p>
+  </div>
+
+  <p>在 Qiskit 這類框架的文件裡，每個量子閘的定義都會附上一個酉矩陣。
+  工程師選擇要用哪個閘，本質上就是在選擇要對態向量做哪一種旋轉。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>$U^\dagger U = I$ 的算子稱為酉算子，保持內積（長度、夾角）不變</li>
+    <li><b>機率守恆的要求，自動導致量子演化必須是酉的</b>（已完整推導）</li>
+    <li>酉算子是「乘 $e^{i\theta}$ 轉角度」在向量空間的推廣</li>
+    <li>$R_z(\theta)$ 等旋轉閘的命名，直接對應它們在 Bloch 球上的幾何動作</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "為什麼量子態的演化（測量除外）必須由酉算子描述？",
+    "options": [
+      "因為酉矩陣計算比較快",
+      "因為只有酉算子能保證機率總和永遠是 1",
+      "因為酉算子的特徵值是實數",
+      "因為量子閘規定必須是方陣"
+    ],
+    "answer": 1,
+    "explain": "從 $U^\\dagger U = I$ 可以直接推出 $\\langle\\psi\\'|\\psi\\'\\rangle = \\langle\\psi|\\psi\\rangle$，也就是機率總和守恆。特徵值必為實數是 Hermitian 算子的性質（第 3 課），不是酉算子。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 2 章，酉算子與量子演化公設的推導。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Single Qubit Gates" 章節 —
+      各種旋轉閘的矩陣定義與 Bloch 球幾何對應。</li>
+    <li>Preskill, J., <i>Lecture Notes for Physics 219: Quantum Computation</i>, Caltech。</li>
+  </ol>
+</section>

@@ -1,0 +1,149 @@
+{
+  "track": "basics-to-qft",
+  "trackTitle": "基礎到量子傅立葉轉換 (QFT)",
+  "lessons": [
+    {
+      "id": "i-and-complex-numbers",
+      "order": 1,
+      "title": "虛數 i 與複數的意義",
+      "track": "basics",
+      "estMinutes": 12,
+      "prereqs": [],
+      "labs": 1,
+      "hook": "拖動一個複數，看它怎麼「轉」——這是理解量子相位的起點。",
+      "file": "lessons-html/i-and-complex-numbers.html"
+    },
+    {
+      "id": "vector-spaces-inner-product",
+      "order": 2,
+      "title": "向量空間與內積",
+      "track": "basics",
+      "estMinutes": 13,
+      "prereqs": ["i-and-complex-numbers"],
+      "labs": 1,
+      "hook": "為什麼內積非得取共軛不可？因為機率不能是負的。",
+      "file": "lessons-html/vector-spaces-inner-product.html"
+    },
+    {
+      "id": "hermitian-eigen",
+      "order": 3,
+      "title": "矩陣、Hermitian 算子與特徵分解",
+      "track": "basics",
+      "estMinutes": 15,
+      "prereqs": ["vector-spaces-inner-product"],
+      "labs": 1,
+      "hook": "完整證明「Hermitian 算子的特徵值必為實數」，並自己檢查矩陣。",
+      "file": "lessons-html/hermitian-eigen.html"
+    },
+    {
+      "id": "unitary-operators",
+      "order": 4,
+      "title": "酉算子與旋轉",
+      "track": "basics",
+      "estMinutes": 13,
+      "prereqs": ["hermitian-eigen"],
+      "labs": 1,
+      "hook": "機率守恆的要求，自動導致量子演化必須是酉的。",
+      "file": "lessons-html/unitary-operators.html"
+    },
+    {
+      "id": "qubit-superposition",
+      "order": 5,
+      "title": "量子位元與疊加態",
+      "track": "basics",
+      "estMinutes": 14,
+      "prereqs": ["unitary-operators"],
+      "labs": 1,
+      "hook": "拖動 Bloch 球，親眼看見「相位是隱形的」。",
+      "file": "lessons-html/qubit-superposition.html"
+    },
+    {
+      "id": "measurement-postulate",
+      "order": 6,
+      "title": "測量公設與機率詮釋",
+      "track": "basics",
+      "estMinutes": 12,
+      "prereqs": ["qubit-superposition"],
+      "labs": 1,
+      "hook": "實際跑 1000 次測量，看統計如何逼近 Born 規則的理論值。",
+      "file": "lessons-html/measurement-postulate.html"
+    },
+    {
+      "id": "tensor-product-multiqubit",
+      "order": 7,
+      "title": "多量子位元與張量積",
+      "track": "basics",
+      "estMinutes": 14,
+      "prereqs": ["measurement-postulate"],
+      "labs": 1,
+      "hook": "把 n 拉到 50，看維度指數成長到超出宇宙原子數。",
+      "file": "lessons-html/tensor-product-multiqubit.html"
+    },
+    {
+      "id": "entanglement-bell-states",
+      "order": 8,
+      "title": "量子糾纏與 Bell 態",
+      "track": "basics",
+      "estMinutes": 14,
+      "prereqs": ["tensor-product-multiqubit"],
+      "labs": 1,
+      "hook": "推導出可以直接驗算的判定式：ad − bc = 0 就是可分離。",
+      "file": "lessons-html/entanglement-bell-states.html"
+    },
+    {
+      "id": "classical-dft",
+      "order": 9,
+      "title": "經典離散傅立葉轉換 (DFT)",
+      "track": "basics",
+      "estMinutes": 15,
+      "prereqs": ["i-and-complex-numbers"],
+      "labs": 1,
+      "hook": "自己畫訊號看頻譜。順便發現：H 閘其實就是 N=2 的傅立葉轉換。",
+      "file": "lessons-html/classical-dft.html"
+    },
+    {
+      "id": "quantum-gates-circuits",
+      "order": 10,
+      "title": "量子閘與電路基礎",
+      "track": "core",
+      "estMinutes": 16,
+      "prereqs": ["entanglement-bell-states"],
+      "labs": 1,
+      "hook": "自己搭電路，親手做出 Bell 態，即時看糾纏判定式跳成非 0。",
+      "file": "lessons-html/quantum-gates-circuits.html"
+    },
+    {
+      "id": "phase-and-unitary-gates",
+      "order": 11,
+      "title": "相位與量子閘的酉表示",
+      "track": "core",
+      "estMinutes": 14,
+      "prereqs": ["quantum-gates-circuits"],
+      "labs": 1,
+      "hook": "看隱形的相位如何被 H 閘「逼」成可測量的機率差異。",
+      "file": "lessons-html/phase-and-unitary-gates.html"
+    },
+    {
+      "id": "qft-derivation",
+      "order": 12,
+      "title": "量子傅立葉轉換：從 DFT 到 QFT",
+      "track": "core",
+      "estMinutes": 20,
+      "prereqs": ["classical-dft", "phase-and-unitary-gates"],
+      "labs": 1,
+      "hook": "兩條主線在這裡匯流。逐步執行電路，並與定義式比對驗證。",
+      "file": "lessons-html/qft-derivation.html"
+    },
+    {
+      "id": "qft-circuit-applications",
+      "order": 13,
+      "title": "QFT 電路實作與應用（Shor 演算法）",
+      "track": "core",
+      "estMinutes": 18,
+      "prereqs": ["qft-derivation"],
+      "labs": 1,
+      "hook": "跑一次完整的 Shor 流程，包含會失敗的情況。",
+      "file": "lessons-html/qft-circuit-applications.html"
+    }
+  ]
+}

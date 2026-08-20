@@ -1,0 +1,166 @@
+<section class="lsec">
+  <div class="sec-label">主線匯流點</div>
+  <h2>兩條線在這裡合併</h2>
+  <p>這是整條主線的匯流點。第 9 課的<b>經典 DFT</b> 和第 11 課的<b>受控相位閘</b>，
+  在這一課合成量子傅立葉轉換。</p>
+  <div class="merge-map">
+    <div class="mm-branch">
+      <span class="mm-label">分支 A</span>
+      <span class="mm-item">虛數 $i$ → DFT</span>
+    </div>
+    <div class="mm-branch">
+      <span class="mm-label">分支 B</span>
+      <span class="mm-item">量子位元 → 電路 → 相位閘</span>
+    </div>
+    <div class="mm-arrow">↓ 匯流 ↓</div>
+    <div class="mm-target">量子傅立葉轉換 QFT</div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心定義</div>
+  <h2>QFT：把 DFT 直接搬到量子態上</h2>
+
+  <div class="formula-box">
+    $$\text{QFT}|j\rangle = \frac{1}{\sqrt N}\sum_{k=0}^{N-1} e^{2\pi i jk/N}|k\rangle,
+      \qquad N = 2^n$$
+  </div>
+
+  <p>跟第 9 課的 DFT 公式並排比較：</p>
+  <div class="compare-grid">
+    <div class="cmp-card">
+      <div class="cmp-title">古典 DFT</div>
+      <div class="cmp-formula">$X_k = \sum_n x_n e^{-2\pi i kn/N}$</div>
+      <div class="cmp-note">作用在一串<b>古典數字</b>上</div>
+    </div>
+    <div class="cmp-card hl">
+      <div class="cmp-title">量子 QFT</div>
+      <div class="cmp-formula">$|j\rangle \mapsto \frac{1}{\sqrt N}\sum_k e^{2\pi ijk/N}|k\rangle$</div>
+      <div class="cmp-note">作用在量子態的<b>機率幅</b>上</div>
+    </div>
+  </div>
+
+  <p><b>指數項一模一樣</b>（只差正負號慣例）。差別在作用對象：
+  因為 $|j\rangle$ 可以疊加在量子暫存器裡，QFT 能<b>同時</b>對指數多個 $j$ 做變換。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">關鍵推導</div>
+  <h2>從定義式推出電路結構</h2>
+
+  <details class="deriv" open>
+    <summary>📐 完整推導：為什麼 QFT 電路長那個樣子（乘積形式）</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">Step 1 · 把 $k$ 用二進位展開</span>
+        $k = k_1 2^{n-1} + k_2 2^{n-2} + \cdots + k_n 2^0$，代入指數項：
+        $$e^{2\pi i jk/N} = e^{2\pi i j \sum_{l=1}^{n} k_l 2^{-l}}
+        = \prod_{l=1}^{n} e^{2\pi i j k_l 2^{-l}}$$
+        <b>指數的和 → 乘積</b>，這一步是整個推導的關鍵。
+      </div>
+      <div class="step"><span class="tag">Step 2 · 把求和拆成張量積</span>
+        因為 $\sum_k$ 是對所有 $k_1,\dots,k_n \in\{0,1\}$ 的組合求和，
+        而每一項都已經是乘積形式，整個式子可以拆成：
+        $$\text{QFT}|j\rangle = \frac{1}{\sqrt N}\bigotimes_{l=1}^{n}
+          \Big(|0\rangle + e^{2\pi i j 2^{-l}}|1\rangle\Big)$$
+        <b>從一個 $2^n$ 維的大求和，變成 $n$ 個獨立單位元態的張量積。</b>
+        這就是為什麼 QFT 只需要多項式數量的閘。
+      </div>
+      <div class="step"><span class="tag">Step 3 · 用二進位小數改寫</span>
+        定義 $0.j_lj_{l+1}\cdots j_n = \frac{j_l}{2}+\frac{j_{l+1}}{4}+\cdots$，則：
+        $$\text{QFT}|j\rangle = \frac{1}{\sqrt N}\bigotimes_{l=1}^{n}
+          \Big(|0\rangle + e^{2\pi i\, 0.j_l j_{l+1}\cdots j_n}|1\rangle\Big)$$
+      </div>
+      <div class="step"><span class="tag">Step 4 · 讀出電路怎麼搭</span>
+        看第 $l$ 個位元的目標形式 $|0\rangle + e^{2\pi i\,0.j_lj_{l+1}\cdots j_n}|1\rangle$：
+        <ul>
+          <li>先做 <b>$H$</b>：得到 $|0\rangle + e^{2\pi i\,0.j_l}|1\rangle$
+            （只有小數點後第一位 $j_l$ 的資訊）</li>
+          <li>再用<b>受控相位閘</b>依序補上 $j_{l+1}, j_{l+2},\dots$，
+            角度分別是 $\pi/2, \pi/4, \pi/8,\dots$（因為每往後一位，權重就減半）</li>
+        </ul>
+        對每個位元重複，最後做一次<b>順序反轉（SWAP）</b>，QFT 電路就完成了。$\blacksquare$
+      </div>
+      <div class="step"><span class="tag">複雜度計算</span>
+        第 1 個位元需要 $1$ 個 $H$ + $(n-1)$ 個受控相位閘，
+        第 2 個需要 $1 + (n-2)$ 個……總計：
+        $$\sum_{l=1}^{n}\big(1 + (n-l)\big) = n + \frac{n(n-1)}{2} = O(n^2)$$
+        <b>只要 $O(n^2)$ 個閘</b>，就完成了 $2^n$ 維空間上的傅立葉轉換。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動驗證</div>
+  <h2>一步一步看電路把態轉過去</h2>
+
+  <p>下面的元件會<b>實際執行</b>推導出來的電路（$H$ + 受控相位閘 + SWAP），
+  並在最後一步<b>與 QFT 定義式逐項比對</b>，把誤差算給你看：</p>
+
+  <div class="widget" data-widget="qft-stepper" data-title="QFT 電路逐步演示 + 定義式驗證"></div>
+
+  <div class="key-insight">
+    <span class="ki-mark">◆</span>
+    <div>
+      <b>走到最後一步時，請注意看兩張圖的對比。</b>
+      <br><br>
+      上圖（機率幅大小）：所有基底態<b>完全一樣高</b>——直接測量的話，
+      結果是均勻隨機的，什麼資訊都得不到。<br><br>
+      下圖（相位）：顏色和指針方向<b>各不相同</b>——資訊全部編碼在相位裡。
+      <br><br>
+      這解釋了一件關鍵的事：<b>QFT 之後不能直接測量了事</b>。
+      必須設計後續步驟，把相位資訊轉換出來——第 13 課的 Shor 演算法就是這麼做的。
+    </div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重要澄清</div>
+  <h2>「指數加速」的適用範圍</h2>
+
+  <p>QFT 用 $O(n^2)$ 個閘處理 $2^n$ 維空間，古典 FFT 需要 $O(N\log N) = O(n2^n)$ 次運算。
+  看起來是指數級的優勢——<b>但這個比較有嚴格的但書</b>：</p>
+
+  <div class="caveat-box">
+    <div class="cav-title">⚠ 這不是「量子電腦做傅立葉轉換比較快」</div>
+    <p>古典 FFT 的輸入是 $N$ 個<b>你可以逐一讀取的數字</b>，輸出也是 $N$ 個可讀取的數字。</p>
+    <p>QFT 的輸入必須<b>已經是量子疊加態</b>，輸出也是量子態——
+    你只能測量一次，得到<b>一個</b>結果，而且會摧毀疊加。
+    你<b>無法</b>把 $2^n$ 個傅立葉係數全部讀出來。</p>
+    <p><b>所以 QFT 的加速只在這種情境下成立</b>：你只需要知道整體分布的
+    某個<b>全域統計特徵</b>（例如「週期是多少」），而不需要每個係數的數值。
+    Shor 演算法剛好符合這個條件，這不是巧合，而是演算法設計者刻意找到的切入點。</p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>QFT 的定義與古典 DFT 在指數項上完全對應，差別在作用於量子機率幅</li>
+    <li><b>乘積形式推導</b>把 $2^n$ 維的求和拆成 $n$ 個單位元態的張量積（已完整推導）</li>
+    <li>電路 = 每個位元一次 $H$ + 一串受控相位閘 + 最後反轉順序，共 $O(n^2)$ 個閘</li>
+    <li>QFT 輸出的機率幅<b>大小均勻</b>，資訊全在相位裡——不能直接測量了事</li>
+    <li>指數加速<b>只適用於「只需全域統計特徵」的情境</b>，不是萬用</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "$n=3$（$N=8$）時，QFT 電路總共需要幾個 Hadamard 閘？",
+    "options": ["1 個", "3 個", "8 個", "9 個"],
+    "answer": 1,
+    "explain": "<b>3 個</b>——每個量子位元各做一次 $H$。由推導 Step 4：對每個位元的處理都是「先做一次 $H$，再補受控相位閘」，所以 $H$ 的數量等於位元數 $n=3$。受控相位閘則有 $\\frac{n(n-1)}{2}=3$ 個。可以在上面的逐步演示裡數數看。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 5 章，QFT 定義與電路構造的完整推導，是本課主要依據。</li>
+    <li>Coppersmith, D.,
+      <i>"An Approximate Fourier Transform Useful in Quantum Factoring"</i>,
+      IBM Research Report RC19642 (1994) — QFT 標準電路構造的原始技術報告。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Quantum Fourier Transform" 章節，
+      含電路圖與程式碼實作對照。</li>
+  </ol>
+</section>

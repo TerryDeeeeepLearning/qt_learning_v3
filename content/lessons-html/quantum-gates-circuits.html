@@ -1,0 +1,149 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>從這裡開始，你要能讀懂論文裡的電路圖</h2>
+  <p>前面九課把數學和物理基礎都打完了。這一課進入「核心」篇：
+  看懂每個符號代表哪個酉算子，並且<b>親手用電路製造出糾纏</b>。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>電路圖的讀法</h2>
+  <p>每條橫線代表一個量子位元隨時間演化，方塊代表施加某個酉算子（量子閘），
+  <b>從左讀到右</b>。這只是把「一串酉算子依序作用在態上」畫成圖，沒有更多。</p>
+
+  <h3>常見單量子位元閘</h3>
+  <div class="gate-grid">
+    <div class="gate-card">
+      <div class="gc-name">X</div>
+      <div class="gc-math">$\begin{pmatrix}0&1\\1&0\end{pmatrix}$</div>
+      <div class="gc-desc">翻轉：$|0\rangle \leftrightarrow |1\rangle$，古典 NOT 的量子版</div>
+    </div>
+    <div class="gate-card">
+      <div class="gc-name">H</div>
+      <div class="gc-math">$\frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}$</div>
+      <div class="gc-desc">製造等權重疊加，幾乎所有演算法的起手式</div>
+    </div>
+    <div class="gate-card">
+      <div class="gc-name">Z</div>
+      <div class="gc-math">$\begin{pmatrix}1&0\\0&-1\end{pmatrix}$</div>
+      <div class="gc-desc">只翻轉 $|1\rangle$ 的相位，機率不變</div>
+    </div>
+    <div class="gate-card">
+      <div class="gc-name">S</div>
+      <div class="gc-math">$\begin{pmatrix}1&0\\0&i\end{pmatrix}$</div>
+      <div class="gc-desc">相位閘，加 90 度相位（第 11 課主角）</div>
+    </div>
+  </div>
+
+  <p>回想第 9 課的發現：<b>$H$ 閘其實就是 $N=2$ 的傅立葉轉換</b>。
+  它之所以能「製造疊加」，本質上是因為傅立葉轉換把「集中在一點」的訊號
+  變成「均勻分布在所有頻率」。</p>
+
+  <h3>受控閘：製造糾纏的唯一途徑</h3>
+  <div class="formula-box">
+    $$\text{CNOT} = \begin{pmatrix}
+      1&0&0&0\\ 0&1&0&0\\ 0&0&0&1\\ 0&0&1&0 \end{pmatrix}$$
+    <div class="eq-note">控制位元為 $|1\rangle$ 時，對目標位元做 X；否則不動</div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動實驗室</div>
+  <h2>自己搭電路，即時看態怎麼變</h2>
+
+  <p>下面的模擬器<b>真的在做矩陣運算</b>——任何你組出來的電路，
+  機率分布都是實際計算出來的，不是查表。它還會即時判斷結果是不是糾纏態：</p>
+
+  <div class="widget" data-widget="circuit-builder" data-title="量子電路模擬器（2 位元）"></div>
+
+  <div class="example-box">
+    <span class="ex-tag">必做實驗 · 製造 Bell 態</span>
+    <p>依序按下 <b>H(q0)</b>，然後 <b>CNOT</b>。（或直接按「一鍵做出 Bell 態」再回頭一步步理解。）</p>
+    <p>觀察三件事：</p>
+    <ul>
+      <li>做完 $H$ 之後：$|00\rangle$ 和 $|10\rangle$ 各 50%，<b>但還不是糾纏</b>（$ad-bc=0$）</li>
+      <li>做完 CNOT 之後：變成 $|00\rangle$ 和 $|11\rangle$ 各 50%，<b>判定式跳成非 0，糾纏出現了</b></li>
+      <li>試試看只按 CNOT 不按 H——<b>做不出糾纏</b>，因為控制位元必須先處在疊加態</li>
+    </ul>
+  </div>
+
+  <details class="deriv" open>
+    <summary>📐 推導：逐步追蹤 Bell 態電路的態演化</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">起點</span>
+        $$|\psi_0\rangle = |00\rangle$$
+      </div>
+      <div class="step"><span class="tag">Step 1 · 對 q0 做 H</span>
+        $H$ 只作用在第一個位元，第二個位元不動：
+        $$|\psi_1\rangle = (H|0\rangle)\otimes|0\rangle
+        = \tfrac{1}{\sqrt2}(|0\rangle+|1\rangle)\otimes|0\rangle
+        = \tfrac{1}{\sqrt2}(|00\rangle+|10\rangle)$$
+        <b>檢查糾纏</b>：$a=\frac{1}{\sqrt2}, b=0, c=\frac{1}{\sqrt2}, d=0$
+        $\Rightarrow ad-bc = 0-0 = 0$ → <b>還不是糾纏</b>（它等於 $|+\rangle\otimes|0\rangle$）。
+      </div>
+      <div class="step"><span class="tag">Step 2 · 做 CNOT（q0 控制，q1 目標）</span>
+        對每一項分別處理：
+        <ul>
+          <li>$|00\rangle$：控制位元是 0 → <b>不動</b>，還是 $|00\rangle$</li>
+          <li>$|10\rangle$：控制位元是 1 → <b>翻轉目標</b>，變成 $|11\rangle$</li>
+        </ul>
+        $$|\psi_2\rangle = \tfrac{1}{\sqrt2}(|00\rangle+|11\rangle) = |\Phi^+\rangle$$
+      </div>
+      <div class="step"><span class="tag">Step 3 · 驗證糾纏</span>
+        $a=\frac{1}{\sqrt2}, b=0, c=0, d=\frac{1}{\sqrt2}$
+        $$ad-bc = \tfrac{1}{\sqrt2}\cdot\tfrac{1}{\sqrt2} - 0 = \tfrac12 \neq 0$$
+        ✓ <b>糾纏態</b>。整個過程只用了兩個閘。$\blacksquare$
+      </div>
+      <div class="step"><span class="tag">關鍵洞察</span>
+        CNOT 本身<b>不會</b>製造糾纏（對 $|00\rangle$ 做 CNOT 還是 $|00\rangle$）。
+        必須是「<b>疊加態</b>當控制位元」時，CNOT 才會把兩個位元綁在一起。
+        <b>疊加 + 受控閘 = 糾纏</b>，兩個缺一不可。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">理論保證</div>
+  <h2>通用性：少數幾個閘就夠了</h2>
+  <p>有一組特定的量子閘（例如 $\{H, T, \text{CNOT}\}$）可以組合出<b>任意精度逼近任何酉算子</b>——
+  這叫<b>通用閘集</b>。</p>
+  <p>這是為什麼硬體廠商只需要把少數幾種閘做得非常精準，理論上就能執行任意量子演算法。
+  就像古典電腦只需要 NAND 閘就能組出所有邏輯電路一樣。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>電路圖是一串依序作用的酉算子，從左讀到右</li>
+    <li>$H$ 閘製造等權重疊加——它本質上是 $N=2$ 的傅立葉轉換</li>
+    <li>CNOT 是最基本的雙位元閘，<b>$H$ + CNOT 製造 Bell 態</b>（已逐步推導）</li>
+    <li><b>疊加 + 受控閘 = 糾纏</b>，兩者缺一不可</li>
+    <li>通用閘集（如 $H,T,\text{CNOT}$）理論上能逼近任意酉算子</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "只對 $|00\\rangle$ 做一次 CNOT（不先做 H），結果會是糾纏態嗎？",
+    "options": [
+      "會，CNOT 是雙位元閘所以一定產生糾纏",
+      "不會，結果還是 $|00\\rangle$",
+      "會，變成 Bell 態",
+      "會變成 $|11\\rangle$"
+    ],
+    "answer": 1,
+    "explain": "CNOT 的控制位元是 $|0\\rangle$，所以什麼都不做，結果仍是 $|00\\rangle$，$ad-bc=0$，沒有糾纏。<b>雙位元閘本身不保證產生糾纏</b>——控制位元必須先處於疊加態。可以在上面的模擬器裡實際試一次。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 4 章，量子閘、電路模型與通用性的完整介紹。</li>
+    <li>Barenco, A. et al., <i>"Elementary Gates for Quantum Computation"</i>,
+      Physical Review A (1995) — 通用閘集的奠基性論文之一。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Single Qubit Gates" 與
+      "Multiple Qubits and Entangled States" 章節，含 Bell 態製備電路範例。</li>
+  </ol>
+</section>

@@ -1,0 +1,134 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>前四課都是工具，從這裡開始是物理</h2>
+  <p>複數、內積、Hermitian、酉算子都準備好了。這一課正式進入主題：
+  量子位元到底是什麼、疊加態怎麼寫、以及一個很多人搞錯的關鍵區別——
+  <b>疊加不等於「不確定」</b>。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>量子位元的一般形式</h2>
+
+  <div class="formula-box">
+    $$|\psi\rangle = \alpha|0\rangle + \beta|1\rangle,\qquad |\alpha|^2+|\beta|^2=1$$
+  </div>
+
+  <p>這就叫<b>疊加態</b>——量子位元不是「非 0 即 1」，而是同時帶有 $|0\rangle$ 和 $|1\rangle$
+  兩個分量，直到被測量（下一課）才會塌縮到其中一個。</p>
+
+  <details class="deriv" open>
+    <summary>📐 推導：兩個複數 = 4 個實數，為什麼 Bloch 球只需要 2 個角度？</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">起點：4 個自由度</span>
+        $\alpha,\beta$ 各是一個複數，各有實部與虛部 → 總共 <b>4 個實數自由度</b>。
+      </div>
+      <div class="step"><span class="tag">限制 1 · 歸一化</span>
+        $|\alpha|^2+|\beta|^2=1$ 是一條方程式，砍掉 1 個自由度 → 剩 <b>3 個</b>。
+      </div>
+      <div class="step"><span class="tag">限制 2 · 全域相位不影響物理</span>
+        把整個態同乘 $e^{i\varphi}$：
+        $$e^{i\varphi}|\psi\rangle = e^{i\varphi}\alpha|0\rangle + e^{i\varphi}\beta|1\rangle$$
+        測量機率是 $|e^{i\varphi}\alpha|^2 = |e^{i\varphi}|^2|\alpha|^2 = |\alpha|^2$，
+        <b>完全沒變</b>。所以 $|\psi\rangle$ 和 $e^{i\varphi}|\psi\rangle$ 在物理上是同一個態，
+        再砍掉 1 個自由度 → 剩 <b>2 個</b>。
+      </div>
+      <div class="step"><span class="tag">結果：參數化成兩個角度</span>
+        利用這個自由度把 $\alpha$ 轉成非負實數，得到標準形式：
+        $$|\psi\rangle = \cos\frac{\theta}{2}|0\rangle + e^{i\phi}\sin\frac{\theta}{2}|1\rangle$$
+        剛好對應球面上一個點：$\theta$ 是緯度、$\phi$ 是經度。<b>這顆球就是 Bloch 球。</b>
+      </div>
+      <div class="step"><span class="tag">為什麼是 $\theta/2$ 不是 $\theta$？</span>
+        因為要讓 $\theta$ 從 $0$ 走到 $\pi$（北極到南極）時，
+        態剛好從 $|0\rangle$ 走到 $|1\rangle$。若用 $\theta$，走半圈就會回到原態，
+        球面會被「繞兩次」。用 $\theta/2$ 才能讓球面與量子態一對一對應。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動探索</div>
+  <h2>Bloch 球：把抽象的疊加態變成看得見的箭頭</h2>
+
+  <div class="widget" data-widget="bloch-sphere" data-title="Bloch 球：拖動 θ、φ 看態如何變化"></div>
+
+  <div class="example-box">
+    <span class="ex-tag">關鍵實驗 · 請務必自己動手做</span>
+    <p>把 <b>θ 固定在 π/2</b>（赤道），然後<b>只拖動 φ</b>。你會看到：</p>
+    <ul>
+      <li>量子態一直在變（機率幅的虛部不斷變化）</li>
+      <li>但 P(0) 和 P(1) <b>永遠停在 50% / 50%</b>，完全不動</li>
+    </ul>
+    <p><b>這就是「相位在單獨測量時是隱形的」最直接的證據。</b>
+    $|+\rangle$（φ=0）和 $|-\rangle$（φ=π）是兩個明確不同的量子態，
+    在後續電路裡行為完全不同，但單獨測量它們卻給出一模一樣的統計結果。
+    第 11 課會告訴你怎麼把這個隱形的資訊「逼」出來。</p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">觀念釐清</div>
+  <h2>疊加 ≠ 「電腦還不知道是 0 還是 1」</h2>
+
+  <p>最常見的誤解，是把疊加態當成「機率上不確定，只是我們還沒看」。這是錯的，原因如下：</p>
+
+  <div class="formula-box small">
+    $$|+\rangle = \tfrac{1}{\sqrt2}(|0\rangle+|1\rangle),\qquad
+      |-\rangle = \tfrac{1}{\sqrt2}(|0\rangle-|1\rangle)$$
+  </div>
+
+  <p>兩者測量結果完全相同（各 50%）。但如果對它們各做一次 $H$ 閘：</p>
+  <div class="formula-box small">
+    $$H|+\rangle = |0\rangle \quad\text{（100\% 測到 0）},\qquad
+      H|-\rangle = |1\rangle \quad\text{（100\% 測到 1）}$$
+  </div>
+
+  <p>如果它們真的只是「50/50 的古典隨機」，那做完 $H$ 之後結果應該還是隨機的。
+  但實際上 <b>結果變成 100% 確定，而且兩者相反</b>——
+  這代表那個「看不見的相位」確實攜帶了真實的物理資訊。
+  <b>古典機率沒有相位，也就沒有這種行為。</b></p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">實際應用</div>
+  <h2>不同硬體，同一套數學</h2>
+  <p>真實的量子位元有很多種物理實現：超導電路、離子阱、光子等。
+  不同平台的 $|0\rangle$、$|1\rangle$ 對應不同的物理自由度（例如超導電路裡是不同能階），
+  但<b>數學描述完全一樣</b>，都是這一課的 $\alpha|0\rangle+\beta|1\rangle$。</p>
+  <p>這也是為什麼量子計算的理論論文通常不指定硬體平台——數學形式是共通的。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>量子位元狀態 $|\psi\rangle=\alpha|0\rangle+\beta|1\rangle$，$|\alpha|^2+|\beta|^2=1$</li>
+    <li>4 個實數自由度，扣掉歸一化與全域相位後<b>只剩 2 個</b>，剛好是 Bloch 球的 $(\theta,\phi)$</li>
+    <li>疊加的關鍵不是「不確定」，而是帶有<b>可以干涉的相位</b></li>
+    <li>$|+\rangle$ 與 $|-\rangle$ 測量統計相同，但經過 $H$ 之後行為完全相反</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "$|+\\rangle = \\frac{1}{\\sqrt2}(|0\\rangle+|1\\rangle)$ 在 Bloch 球上的位置是？",
+    "options": [
+      "北極（$\\theta=0$）",
+      "南極（$\\theta=\\pi$）",
+      "赤道上，$\\theta=\\pi/2,\\ \\phi=0$",
+      "赤道上，$\\theta=\\pi/2,\\ \\phi=\\pi$"
+    ],
+    "answer": 2,
+    "explain": "$\\cos(\\theta/2)=\\sin(\\theta/2)=1/\\sqrt2$ 需要 $\\theta=\\pi/2$（赤道），且係數都是正實數代表沒有額外相位，$\\phi=0$。若 $\\phi=\\pi$ 則會得到 $|-\\rangle$。可以回到上面的 Bloch 球按 |+⟩ 按鈕驗證。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 1 章，量子位元與 Bloch 球的標準介紹。</li>
+    <li>Krantz, P. et al., <i>"A Quantum Engineer's Guide to Superconducting Qubits"</i>,
+      Applied Physics Reviews (2019) — 高引用綜述論文，說明量子位元在真實硬體上的物理實現。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Representing Qubit States" 章節。</li>
+  </ol>
+</section>

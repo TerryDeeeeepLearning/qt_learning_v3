@@ -1,0 +1,141 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>看懂 QFT 之前，先確定你真的懂 DFT</h2>
+  <p>這一課是為第 12 課鋪路的關鍵複習。QFT 和 DFT 的公式<b>長得幾乎一模一樣</b>，
+  差別只在「作用的對象」。如果 DFT 這關沒過，QFT 只會是一堆看不懂的符號。</p>
+  <p>另外，這一課是本主線的<b>獨立分支</b>——它只需要第 1 課的複數知識，
+  跟量子位元那條線平行，最後兩條線會在第 12 課匯流。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>DFT 在解決什麼問題</h2>
+
+  <p>給一組長度 $N$ 的數列 $x_0,\dots,x_{N-1}$（想成訊號隨時間變化的數值），
+  DFT 把它轉成另一組數列 $X_0,\dots,X_{N-1}$，代表「每個頻率成分佔多少」：</p>
+
+  <div class="formula-box">
+    $$X_k = \sum_{n=0}^{N-1} x_n \, e^{-2\pi i kn/N}$$
+    <div class="eq-note">請記住這個指數項的形狀，第 12 課會再看到一次</div>
+  </div>
+
+  <details class="deriv" open>
+    <summary>📐 直覺推導：這個式子到底在「問」什麼？</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">Step 1 · 把指數項看成旋轉的箭頭</span>
+        由第 1 課，$e^{-2\pi i kn/N}$ 是一個<b>單位長度的箭頭</b>，
+        隨著 $n$ 增加，它以固定速率旋轉。速率由 $k$ 決定：
+        $k$ 越大，轉得越快。
+      </div>
+      <div class="step"><span class="tag">Step 2 · 乘上訊號再全部加起來</span>
+        $\sum_n x_n e^{-2\pi i kn/N}$ 的意思是：
+        「用 $x_n$ 當權重，把這些旋轉的箭頭加總起來」。
+      </div>
+      <div class="step"><span class="tag">Step 3 · 什麼時候會加出大的結果？</span>
+        如果 $x_n$ 的變化<b>剛好跟這個旋轉速率同步</b>，
+        那麼每一項箭頭都會指向相近的方向，加起來就會很長 → $|X_k|$ 很大。<br>
+        如果不同步，箭頭指向四面八方，互相抵消 → $|X_k|$ 接近 0。
+      </div>
+      <div class="step"><span class="tag">結論</span>
+        <b>$X_k$ 在問：「訊號裡有多少成分，跟頻率 $k$ 的振盪對得上？」</b>
+        這個「同相加強、異相抵消」的機制，
+        跟第 1 課的量子干涉<b>是同一個數學現象</b>——這不是巧合，
+        正是 DFT 能被搬進量子力學的深層原因。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動探索</div>
+  <h2>自己畫訊號，即時看頻譜</h2>
+
+  <p>下面的元件<b>真的在跑 DFT</b>（每次你改動訊號，16 點的 DFT 會重新計算）。
+  特別推薦「自己畫」模式，畫個有規律重複的波形試試：</p>
+
+  <div class="widget" data-widget="dft-explorer" data-title="DFT 頻譜探索器"></div>
+
+  <div class="key-insight">
+    <span class="ki-mark">◆</span>
+    <div>
+      <b>訊號裡的週期性，會反映成頻域裡的尖峰。</b>
+      <br><br>
+      這個「從訊號找出隱藏週期」的能力，
+      正是第 13 課 Shor 演算法要用 QFT 的<b>唯一理由</b>。
+      演算法會把「質因數分解」轉換成「找週期」，再用傅立葉轉換把週期找出來。
+    </div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">關鍵性質</div>
+  <h2>DFT 是一個酉變換</h2>
+
+  <p>把 DFT 寫成矩陣形式 $X = Fx$，這個矩陣（乘上正規化常數 $\frac{1}{\sqrt N}$ 之後）
+  滿足 $F^\dagger F = I$。</p>
+
+  <div class="example-box">
+    <span class="ex-tag">驗算範例 · $N=2$ 的最小情況</span>
+    <p>$N=2$ 時，$e^{-2\pi i kn/2} = e^{-\pi i kn} = (-1)^{kn}$，所以：</p>
+    <div class="formula-box small">
+      $$F = \frac{1}{\sqrt2}\begin{pmatrix}
+        (-1)^{0} & (-1)^{0} \\ (-1)^{0} & (-1)^{1}\end{pmatrix}
+      = \frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}$$
+    </div>
+    <p><b>等一下——這不就是 Hadamard 閘嗎？</b></p>
+    <div class="formula-box small">
+      $$H = \frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}$$
+    </div>
+    <p>沒錯。<b>單量子位元的 QFT，就是 Hadamard 閘。</b>
+    這不是巧合，是第 12 課 QFT 電路裡「每個位元都要先做一次 $H$」的根本原因。
+    你在第 10 課會頻繁用到的 $H$ 閘，其實一直都是一個傅立葉轉換。</p>
+    <p>驗證酉性：$F^\dagger F = \frac12\begin{pmatrix}1&1\\1&-1\end{pmatrix}
+      \begin{pmatrix}1&1\\1&-1\end{pmatrix} = \frac12\begin{pmatrix}2&0\\0&2\end{pmatrix} = I$ ✓</p>
+  </div>
+
+  <p>DFT 本質上是酉算子——<b>這正是它能被搬到量子力學框架裡的關鍵</b>，
+  因為第 4 課說過，量子態的演化本來就要求是酉的。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">實際應用</div>
+  <h2>FFT：古典世界的效率革命</h2>
+  <p>DFT 的高效計算演算法——<b>快速傅立葉轉換（FFT）</b>，由 Cooley 與 Tukey 於 1965 年提出——
+  是整個數位訊號處理、音訊壓縮、影像處理領域的基礎工具，
+  把原本 $O(N^2)$ 的計算複雜度降到 $O(N\log N)$。</p>
+  <p>這個「找到更有效率的電路來實現同一個變換」的思路，
+  跟第 12 課 QFT 電路只需要 $O(n^2)$ 個量子閘（$n=\log_2 N$）是類似的工程精神，
+  但量子版本的效率提升更加驚人——<b>不過也有嚴格的適用限制，第 12 課會講清楚</b>。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>DFT：$X_k = \sum_n x_n e^{-2\pi i kn/N}$，把訊號從時域轉到頻域</li>
+    <li>機制是「同相加強、異相抵消」，跟量子干涉是同一個數學現象</li>
+    <li>DFT（正規化後）是<b>酉變換</b>，這是它能搬進量子力學的關鍵</li>
+    <li><b>$N=2$ 的 DFT 就是 Hadamard 閘</b>（已驗算）</li>
+    <li>週期性 → 頻域尖峰，這是 Shor 演算法用 QFT 的唯一理由</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "$N=4$、$k=1$、$n=2$ 時，$e^{-2\\pi i kn/N}$ 等於多少？",
+    "options": ["$1$", "$-1$", "$i$", "$-i$"],
+    "answer": 1,
+    "explain": "$e^{-2\\pi i \\cdot 1 \\cdot 2/4} = e^{-i\\pi} = \\cos(-\\pi) + i\\sin(-\\pi) = -1 + 0i = -1$。用第 1 課的旋轉直覺：轉了 $-\\pi$ 弧度 = $-180°$，箭頭指向反方向。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Cooley, J. W. &amp; Tukey, J. W.,
+      <i>"An Algorithm for the Machine Calculation of Complex Fourier Series"</i>,
+      Mathematics of Computation (1965) — FFT 演算法的奠基性論文。</li>
+    <li>Oppenheim, A. V. &amp; Schafer, R. W., <i>Discrete-Time Signal Processing</i> —
+      DFT 與其性質的標準教材介紹。</li>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 5 章，在引入 QFT 前同樣先回顧經典 DFT 的定義。</li>
+  </ol>
+</section>

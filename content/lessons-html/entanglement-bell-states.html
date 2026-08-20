@@ -1,0 +1,137 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>把「糾纏」講成一個精確的數學陳述</h2>
+  <p>「糾纏」大概是量子計算裡被誤解最多的詞。這一課用上一課的張量積工具，
+  給它一個<b>可以驗算的定義</b>，而不是「兩個粒子神秘連動」這種模糊說法。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>糾纏態的定義</h2>
+
+  <div class="formula-box">
+    $$|\psi\rangle \neq |\psi_1\rangle\otimes|\psi_2\rangle
+      \quad\text{（對任何 }|\psi_1\rangle,|\psi_2\rangle\text{ 都成立）}
+      \ \Longrightarrow\ \text{糾纏態}$$
+  </div>
+
+  <p>最經典的例子是 <b>Bell 態</b>：</p>
+  <div class="formula-box small">
+    $$|\Phi^\pm\rangle = \tfrac{1}{\sqrt2}(|00\rangle\pm|11\rangle),\qquad
+      |\Psi^\pm\rangle = \tfrac{1}{\sqrt2}(|01\rangle\pm|10\rangle)$$
+    <div class="eq-note">四個 Bell 態構成一組正交基底</div>
+  </div>
+
+  <details class="deriv" open>
+    <summary>📐 推導：導出一個可以直接驗算的判定式</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">目標</span>
+        找一個公式，代入係數就能判斷「這個態是不是糾纏」，不用每次都手動嘗試拆解。
+      </div>
+      <div class="step"><span class="tag">Step 1 · 假設可分離</span>
+        設 $|\psi\rangle = a|00\rangle+b|01\rangle+c|10\rangle+d|11\rangle$ 可以寫成
+        $(\alpha_1|0\rangle+\beta_1|1\rangle)\otimes(\alpha_2|0\rangle+\beta_2|1\rangle)$。
+        由上一課的展開式，比對係數得：
+        $$a=\alpha_1\alpha_2,\quad b=\alpha_1\beta_2,\quad
+          c=\beta_1\alpha_2,\quad d=\beta_1\beta_2$$
+      </div>
+      <div class="step"><span class="tag">Step 2 · 交叉相乘</span>
+        $$ad = (\alpha_1\alpha_2)(\beta_1\beta_2) = \alpha_1\alpha_2\beta_1\beta_2$$
+        $$bc = (\alpha_1\beta_2)(\beta_1\alpha_2) = \alpha_1\alpha_2\beta_1\beta_2$$
+        兩者<b>完全相同</b>（只是乘法交換順序）。
+      </div>
+      <div class="step"><span class="tag">Step 3 · 得到判定式</span>
+        $$\boxed{\ \text{可分離}\iff ad - bc = 0\ }$$
+        這是<b>充要條件</b>：可分離必然滿足；反過來若滿足也一定可以拆解回去。
+      </div>
+      <div class="step"><span class="tag">Step 4 · 驗證 Bell 態</span>
+        $|\Phi^+\rangle$：$a=d=\frac{1}{\sqrt2}$，$b=c=0$。
+        $$ad-bc = \tfrac{1}{\sqrt2}\cdot\tfrac{1}{\sqrt2} - 0 = \tfrac12 \neq 0$$
+        <b>確認是糾纏態。</b>不用再手動試拆了。$\blacksquare$
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動探索</div>
+  <h2>自己驗算 + 看測量關聯</h2>
+
+  <p>下面的元件會即時計算 $ad-bc$，並且可以<b>實際跑 200 次雙位元測量</b>，
+  看糾纏態與乘積態的關聯模式差在哪：</p>
+
+  <div class="widget" data-widget="entanglement-check" data-title="糾纏判定器 + 測量關聯實驗"></div>
+
+  <div class="example-box">
+    <span class="ex-tag">請特別注意 · |+⟩|+⟩ 這個選項</span>
+    <p>兩個位元<b>都</b>處在疊加態，看起來非常「量子」，四種結果都會出現，
+    但它 $ad-bc = 0.5\times0.5 - 0.5\times0.5 = 0$，<b>完全沒有糾纏</b>。</p>
+    <p><b>疊加是單一系統的性質，糾纏是系統之間的性質——兩者是不同的東西。</b>
+    這是初學最容易混淆的一點。</p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">物理意義</div>
+  <h2>關聯性，以及它為什麼不是超光速通訊</h2>
+
+  <p>對 $|\Phi^+\rangle$ 測量第一個量子位元，不管結果是 0 還是 1，
+  第二個量子位元會立刻「確定」是同一個值。</p>
+
+  <p>但這<b>不是</b>超光速傳訊息——因為第一個位元的測量結果本身是完全隨機的（各 50%），
+  你無法「控制」它變成你想傳的訊息。遠方的人單看自己那一邊，
+  只會看到 50/50 的隨機結果，跟沒有糾纏時完全一樣。
+  <b>只有當雙方把結果拿來比對（需要古典通訊，受光速限制）時，關聯才顯現出來。</b></p>
+
+  <p>那這種關聯到底特別在哪？特別在它<b>無法用古典的「隱變數」理論解釋</b>——
+  也就是不能說「其實兩個粒子出發時就講好了答案，只是我們不知道」。
+  這件事可以用 <b>Bell 不等式</b>量化檢驗，而實驗上確實觀測到違反 Bell 不等式的結果。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">往後的連結</div>
+  <h2>糾纏在後續課程的角色</h2>
+  <ul>
+    <li><b>第 10 課</b>：你會親手用 $H$ + CNOT 電路<b>製造出</b> Bell 態</li>
+    <li><b>量子隱形傳態、超密編碼</b>：Bell 態是這些協議的核心資源</li>
+    <li><b>VQE / QAOA（下一條主線）</b>：變分電路裡的「糾纏層（entangling layer）」，
+      目的就是製造糾纏來提升線路的表達能力（expressivity）</li>
+  </ul>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>糾纏態無法寫成單一量子位元態的張量積</li>
+    <li>判定式 <b>$ad-bc=0 \iff$ 可分離</b>（已完整推導，可直接驗算）</li>
+    <li>Bell 態是最基本的雙位元糾纏態，四個構成正交基底</li>
+    <li>糾纏的關聯不能傳訊息，但無法用古典隱變數理論解釋</li>
+    <li><b>疊加 ≠ 糾纏</b>：$|+\rangle|+\rangle$ 高度疊加卻毫無糾纏</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "$|01\\rangle$ 是糾纏態嗎？",
+    "options": [
+      "是，因為兩個位元不一樣",
+      "不是，它等於 $|0\\rangle \\otimes |1\\rangle$",
+      "是，因為它出現在 Bell 態裡",
+      "無法判斷"
+    ],
+    "answer": 1,
+    "explain": "$|01\\rangle = |0\\rangle \\otimes |1\\rangle$ 本身就是乘積態。用判定式驗算：$a=0,b=1,c=0,d=0$，$ad-bc = 0-0 = 0$ ✓ 可分離。兩個位元完全獨立，沒有糾纏。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 2 章，糾纏態與 Bell 態的標準定義。</li>
+    <li>Bell, J. S., <i>"On the Einstein Podolsky Rosen Paradox"</i>,
+      Physics Physique Физика (1964) — 提出 Bell 不等式的奠基性論文。</li>
+    <li>Aspect, A., Grangier, P. &amp; Roger, G.,
+      <i>"Experimental Realization of Einstein-Podolsky-Rosen-Bohm Gedankenexperiment"</i>,
+      Physical Review Letters (1982) — 早期驗證違反 Bell 不等式的重要實驗之一。</li>
+  </ol>
+</section>

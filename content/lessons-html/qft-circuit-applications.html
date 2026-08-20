@@ -1,0 +1,193 @@
+<section class="lsec">
+  <div class="sec-label">主線最後一課</div>
+  <h2>看 QFT 在一個真實演算法裡實際扮演什麼角色</h2>
+  <p>目標不是把 Shor 演算法每個細節推完（那值得另開一條主線），
+  而是讓你看清楚：<b>QFT 在整體流程中的位置</b>。
+  以後在論文裡看到「我們用 QFT 做了 XX」時，能立刻抓到它在幹什麼。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">問題轉換</div>
+  <h2>把「質因數分解」變成「找週期」</h2>
+
+  <p>Shor 演算法（1994）的核心洞察不在量子部分，而在<b>問題轉換</b>：</p>
+
+  <div class="formula-box">
+    $$f(x) = a^x \bmod N \quad\text{是週期函數，週期為 } r$$
+    $$a^r \equiv 1 \pmod N$$
+  </div>
+
+  <details class="deriv" open>
+    <summary>📐 推導：為什麼知道週期 $r$ 就能算出因數？</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">Step 1 · 從週期的定義出發</span>
+        $$a^r \equiv 1 \pmod N \quad\Longrightarrow\quad a^r - 1 \equiv 0 \pmod N$$
+        也就是 $N$ 整除 $a^r - 1$。
+      </div>
+      <div class="step"><span class="tag">Step 2 · 假設 $r$ 是偶數，做因式分解</span>
+        若 $r$ 是偶數，令 $r = 2m$，則可以用平方差公式：
+        $$a^r - 1 = (a^{m})^2 - 1 = \big(a^{m}-1\big)\big(a^{m}+1\big)$$
+      </div>
+      <div class="step"><span class="tag">Step 3 · 關鍵推論</span>
+        $N$ 整除 $\big(a^{m}-1\big)\big(a^{m}+1\big)$，
+        但（在運氣好的情況下）$N$ <b>不整除</b>其中任何一個單獨的因式。
+        <br><br>
+        這代表 $N$ 的質因數被<b>拆散</b>到這兩個因式裡了！
+        所以取最大公因數就能把它們撈出來：
+        $$\gcd(a^{r/2}-1,\ N)\quad\text{和}\quad\gcd(a^{r/2}+1,\ N)$$
+        很可能就是 $N$ 的非平凡因數。
+      </div>
+      <div class="step"><span class="tag">Step 4 · 失敗條件</span>
+        這個方法有兩種失敗情況：
+        <ul>
+          <li>$r$ 是<b>奇數</b> → 沒辦法用平方差，直接失敗</li>
+          <li>$a^{r/2} \equiv -1 \pmod N$ → 此時 $a^{r/2}+1 \equiv 0$，
+            $\gcd$ 會直接得到 $N$ 本身，是平凡因數，沒有用</li>
+        </ul>
+        <b>所以 Shor 演算法本質上是機率性的</b>，失敗就換一個 $a$ 重試。
+        可以證明成功機率至少是 $1/2$，所以期望重試次數很少。$\blacksquare$
+      </div>
+      <div class="step"><span class="tag">注意</span>
+        <b>以上全部是古典數論，完全沒用到量子力學。</b>
+        量子電腦只負責一件事：<b>快速找出週期 $r$</b>。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動實驗室</div>
+  <h2>自己跑一次完整流程</h2>
+
+  <p>下面的元件會實際計算 $f(x)=a^x \bmod N$ 的序列、找出週期、
+  模擬 QFT 之後的測量分布，並<b>逐步執行古典後處理</b>推出質因數。
+  試試不同的 $a$，你會遇到成功也會遇到失敗：</p>
+
+  <div class="widget" data-widget="shor-demo" data-title="Shor 演算法完整流程模擬"></div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">QFT 的位置</div>
+  <h2>三個步驟，QFT 只在中間那一步</h2>
+
+  <div class="pipeline">
+    <div class="pl-step">
+      <div class="pl-num">1</div>
+      <div class="pl-body">
+        <div class="pl-title">模冪運算（量子）</div>
+        <div class="pl-desc">用量子電路計算 $|x\rangle|0\rangle \to |x\rangle|a^x \bmod N\rangle$，
+        把 $f(x)$ 的週期性<b>編碼進疊加態</b>。這一步在實作上其實是最耗資源的部分。</div>
+      </div>
+    </div>
+    <div class="pl-step hl">
+      <div class="pl-num">2</div>
+      <div class="pl-body">
+        <div class="pl-title">量子傅立葉轉換（量子）← QFT 在這裡</div>
+        <div class="pl-desc">對存有 $x$ 的暫存器做 QFT，把<b>時域裡的週期</b>轉換成
+        <b>頻域裡的尖峰</b>——正是第 9 課你在頻譜探索器裡看到的那件事，
+        只是這裡對量子疊加態一次性完成。</div>
+      </div>
+    </div>
+    <div class="pl-step">
+      <div class="pl-num">3</div>
+      <div class="pl-body">
+        <div class="pl-title">測量 + 古典後處理（古典）</div>
+        <div class="pl-desc">測量結果會以高機率落在 $k \approx M\cdot s/r$ 附近，
+        用<b>連分數演算法</b>反推出 $r$，再用上面推導的 $\gcd$ 步驟算出質因數。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="key-insight">
+    <span class="ki-mark">◆</span>
+    <div>
+      <b>QFT 負責把「隱藏的週期」變成「測量時會集中出現的位置」。</b>
+      找出週期數值、再算出質因數，都是電路之外的<b>古典</b>計算。
+      <br><br>
+      這個「<b>量子做轉換、古典做收尾</b>」的分工模式，
+      在很多量子演算法裡都會重複出現——
+      也包括你接下來要學的 VQE、QAOA 這類古典-量子混合演算法。
+    </div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">實作現實</div>
+  <h2>真實硬體上的取捨與現況</h2>
+
+  <p><b>Approximate QFT</b>：實作時通常會捨棄角度小於某個門檻的受控相位閘
+  （例如 $\pi/2^k$ 當 $k$ 很大時）。因為在雜訊環境下，
+  這些微小相位對最終機率分布的影響往往<b>比雜訊本身還小</b>，
+  捨棄它們可以顯著縮短電路深度、降低出錯機率。這在現階段的
+  NISQ（Noisy Intermediate-Scale Quantum）硬體上是常見的工程權衡。</p>
+
+  <div class="caveat-box">
+    <div class="cav-title">關於「量子電腦破解 RSA」的正確理解</div>
+    <p>Shor 演算法明確指出：一旦有足夠大、足夠穩定的量子電腦，
+    RSA 等公開金鑰系統所依賴的「大數分解很難」這個假設就會被打破。
+    這是<b>後量子密碼學（post-quantum cryptography）</b>近年迅速發展的直接動機。</p>
+    <p>但要分解 RSA 等級的大數，所需的<b>邏輯量子位元數與容錯能力遠超現有硬體</b>。
+    各家平台做過的多是小規模展示或簡化變體。
+    具體進度變動很快，建議直接查閱各硬體團隊的最新論文與公告——
+    <b>本課不對當前規模做任何具體數字的斷言。</b></p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">主線完結</div>
+  <h2>從 $i$ 走到 Shor，你經過了什麼</h2>
+
+  <div class="journey">
+    <div class="jn-item"><span class="jn-n">1</span>虛數 $i$ 是一個旋轉</div>
+    <div class="jn-item"><span class="jn-n">2-3</span>內積、Hermitian、特徵分解</div>
+    <div class="jn-item"><span class="jn-n">4</span>酉算子保持機率守恆</div>
+    <div class="jn-item"><span class="jn-n">5-6</span>疊加態與 Born 規則</div>
+    <div class="jn-item"><span class="jn-n">7-8</span>張量積與糾纏</div>
+    <div class="jn-item"><span class="jn-n">9</span>DFT：週期 → 頻譜尖峰</div>
+    <div class="jn-item"><span class="jn-n">10-11</span>電路與相位操作</div>
+    <div class="jn-item"><span class="jn-n">12</span>QFT 電路推導</div>
+    <div class="jn-item done"><span class="jn-n">13</span>Shor 演算法中的 QFT</div>
+  </div>
+
+  <p><b>下一條主線建議：量子機器學習（VQE、QAOA）。</b>
+  這些古典-量子混合演算法會用到你今天學到的疊加、糾纏、電路構造、
+  以及第 6 課的統計取樣成本概念，再加上「優化」這個新維度。
+  第 8 課提過的「糾纏層」，到那時就會變成你要親手調整的設計選擇。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>Shor 把「質因數分解」轉換成「找週期」，<b>轉換過程全是古典數論</b>（已完整推導）</li>
+    <li>量子電腦只負責一件事：快速找出週期 $r$</li>
+    <li>QFT 的角色是把週期性從時域轉到頻域，讓測量結果集中在可辨識的位置</li>
+    <li>演算法是<b>機率性的</b>：$r$ 為奇數或 $a^{r/2}\equiv-1$ 時失敗，換 $a$ 重試</li>
+    <li>「量子做轉換、古典做收尾」是許多量子演算法的共通模式</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "在 Shor 演算法中，QFT 的作用是什麼？",
+    "options": [
+      "直接算出 $N$ 的質因數",
+      "把週期性從時域轉換到頻域，讓測量結果集中在跟週期相關的位置",
+      "加密輸入的數字以保護隱私",
+      "取代古典的 gcd 計算"
+    ],
+    "answer": 1,
+    "explain": "QFT 只做「轉換」這一件事：把 $f(x)=a^x \\bmod N$ 隱藏的週期變成頻域尖峰。之後還要靠古典的<b>連分數演算法</b>從測量結果反推週期 $r$，再靠古典的 <b>gcd</b> 算出質因數。量子部分不會直接吐出答案。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Shor, P. W., <i>"Polynomial-Time Algorithms for Prime Factorization and
+      Discrete Logarithms on a Quantum Computer"</i>, SIAM Journal on Computing (1997;
+      1994 年會議版本先行發表) — Shor 演算法的原始論文。</li>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 5 章，Shor 演算法完整流程（含 QFT 角色、連分數後處理）的推導。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Shor's Algorithm" 章節，
+      含電路實作範例與 NISQ 環境下的實作限制討論。</li>
+  </ol>
+</section>

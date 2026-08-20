@@ -1,0 +1,135 @@
+<section class="lsec">
+  <div class="sec-label">為什麼要學這個</div>
+  <h2>$|\psi\rangle$ 這個符號，背後就是一個向量</h2>
+  <p>論文裡的量子態寫成 $|\psi\rangle$。要看懂「重疊」「正交」「機率幅」這些詞，
+  得先把<b>向量空間</b>和<b>內積</b>這兩個工具準備好——它們是整個量子力學形式系統的地基。</p>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">先備知識</div>
+  <details class="deriv prereq">
+    <summary>🔁 快速複習：上一課的複數共軛</summary>
+    <div class="deriv-body">
+      <div class="step">
+        複數 $z = a+bi$ 的<b>共軛</b>是 $\bar z = a - bi$。
+        幾何上就是<b>把角度反過來</b>：若 $z = re^{i\theta}$，則 $\bar z = re^{-i\theta}$。
+      </div>
+      <div class="step">
+        關鍵性質：$z\bar z = r^2 = |z|^2$，一定是<b>非負實數</b>。
+        這一課的內積會大量用到這件事，因為量子力學需要「機率」是實數。
+      </div>
+    </div>
+  </details>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">核心概念</div>
+  <h2>Dirac 符號與內積</h2>
+
+  <p>量子計算裡最常見的空間是 $\mathbb{C}^2$（單一量子位元）。
+  用 Dirac 符號，向量寫成 $|\psi\rangle$（讀作 ket）。</p>
+
+  <p>複數向量空間上的內積 $\langle\phi|\psi\rangle$ 滿足一條關鍵規則：</p>
+
+  <div class="formula-box">
+    $$\langle\phi|\psi\rangle = \overline{\langle\psi|\phi\rangle}$$
+    <div class="eq-note">交換順序要取共軛——這是複數版本特有的，實數向量不用管</div>
+  </div>
+
+  <p>$\langle\psi|$ 稱為 bra，是 $|\psi\rangle$ 的<b>共軛轉置</b>。
+  「bra」+「ket」拼起來就是 bracket（括號），這是 Dirac 的雙關命名。</p>
+
+  <details class="deriv">
+    <summary>📐 推導：為什麼內積非得取共軛不可？</summary>
+    <div class="deriv-body">
+      <div class="step"><span class="tag">問題</span>
+        我們希望「向量的長度」$\langle\psi|\psi\rangle$ 是<b>非負實數</b>（因為它之後要當機率用）。
+      </div>
+      <div class="step"><span class="tag">如果不取共軛會怎樣？</span>
+        假設 $|\psi\rangle = \begin{pmatrix} i \\ 0\end{pmatrix}$，用一般的「對應相乘再相加」：
+        $$i \times i = i^2 = -1$$
+        長度變成 <b>負數</b>——這樣機率就會是負的，物理上完全講不通。
+      </div>
+      <div class="step"><span class="tag">取共軛之後</span>
+        $$\langle\psi|\psi\rangle = \bar i \times i = (-i)(i) = -i^2 = 1$$
+        得到 $1$，非負實數 ✓。<b>共軛不是數學家的癖好，是為了讓機率有意義的必要設計。</b>
+      </div>
+      <div class="step"><span class="tag">一般形式</span>
+        $$\langle\psi|\psi\rangle = \sum_i \overline{\psi_i}\,\psi_i = \sum_i |\psi_i|^2 \geq 0$$
+        每一項都是「複數乘自己的共軛」= 模長平方，必為非負實數。
+      </div>
+    </div>
+  </details>
+
+  <div class="formula-box">
+    $$\||\psi\rangle\| = \sqrt{\langle\psi|\psi\rangle},\qquad
+      \text{量子態要求}\ \langle\psi|\psi\rangle = 1$$
+    <div class="eq-note">這就是「機率幅平方和等於 1」這句話的來源</div>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">互動探索</div>
+  <h2>內積的幾何意義：投影</h2>
+
+  <p>內積在幾何上就是「把一個向量投影到另一個方向，看剩下多少」。
+  拖曳下面的兩個向量，觀察內積怎麼變化：</p>
+
+  <div class="widget" data-widget="inner-product" data-title="兩個量子態的內積與正交"></div>
+
+  <p>如果 $\langle i|j\rangle = \delta_{ij}$（相同為 1、不同為 0），
+  這組向量就叫<b>正交歸一基底</b>。最常用的一組是：</p>
+
+  <div class="formula-box small">
+    $$|0\rangle=\begin{pmatrix}1\\0\end{pmatrix},\qquad
+      |1\rangle=\begin{pmatrix}0\\1\end{pmatrix}$$
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">實際應用</div>
+  <h2>用內積「讀出」係數</h2>
+
+  <div class="example-box">
+    <span class="ex-tag">手算範例 · 從態向量取出機率幅</span>
+    <p>任何量子態都能寫成基底的線性組合：$|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$。
+    問題是：給你 $|\psi\rangle$，怎麼把 $\alpha$ 取出來？</p>
+    <div class="formula-box small">
+      $$\langle 0|\psi\rangle = \langle 0|\big(\alpha|0\rangle + \beta|1\rangle\big)
+        = \alpha\underbrace{\langle 0|0\rangle}_{=1} + \beta\underbrace{\langle 0|1\rangle}_{=0} = \alpha$$
+    </div>
+    <p>因為基底是正交的，$\langle 0|1\rangle = 0$ 會把不要的項<b>直接消掉</b>，
+    只留下 $\alpha$。同理 $\beta = \langle 1|\psi\rangle$。</p>
+    <p><b>這個「投影取係數」的操作，正是第 6 課測量機率（Born 規則）的數學基礎。</b>
+    測量的機率就是 $|\langle i|\psi\rangle|^2$——把係數取出來再取模長平方。</p>
+  </div>
+</section>
+
+<section class="lsec">
+  <div class="sec-label">重點回顧</div>
+  <h2>小結</h2>
+  <ul>
+    <li>量子態是複數向量空間裡的向量，寫成 $|\psi\rangle$</li>
+    <li>內積 $\langle\phi|\psi\rangle$ 交換順序要取共軛，這是為了讓長度（機率）是非負實數</li>
+    <li>正交歸一基底 $\langle i|j\rangle=\delta_{ij}$ 讓我們可以用內積「投影」出係數</li>
+    <li>$|\langle i|\psi\rangle|^2$ 就是測量機率——第 6 課會正式登場</li>
+  </ul>
+
+  <div class="quiz" data-quiz='{
+    "q": "若 $|\\psi\\rangle = \\frac{1}{\\sqrt2}|0\\rangle + \\frac{i}{\\sqrt2}|1\\rangle$，則 $\\langle\\psi|\\psi\\rangle$ 等於多少？",
+    "options": ["0", "1", "$i$", "$1+i$"],
+    "answer": 1,
+    "explain": "$\\langle\\psi|\\psi\\rangle = \\overline{(1/\\sqrt2)}(1/\\sqrt2) + \\overline{(i/\\sqrt2)}(i/\\sqrt2) = \\frac12 + \\frac12 = 1$。注意第二項：$\\overline{i} \\cdot i = (-i)(i) = 1$，共軛讓結果變成正實數，這正是上面推導的重點。"
+  }'></div>
+</section>
+
+<section class="lsec sources">
+  <div class="sec-label">知識來源</div>
+  <ol>
+    <li>Nielsen, M. A. &amp; Chuang, I. L., <i>Quantum Computation and Quantum Information</i> —
+      第 2 章「線性代數」，向量空間、內積、Dirac 符號的標準介紹。</li>
+    <li>IBM Quantum, <i>Qiskit Textbook</i>，"Linear Algebra" 章節 —
+      以量子計算為背景重新介紹內積與正交基底。</li>
+    <li>Griffiths, D. J., <i>Introduction to Quantum Mechanics</i> — 態向量與內積的物理詮釋。</li>
+  </ol>
+</section>
